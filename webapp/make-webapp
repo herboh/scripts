@@ -22,7 +22,7 @@ Return JSON only with:
 EOF
 )
 
-META=$(llm -m "$MODEL" --schema ~/code/agent/schema.json "$PROMPT")
+META=$(llm -m "$MODEL" --schema ~/code/git/scripts/webapp/schema.json "$PROMPT")
 
 NAME=$(echo "$META" | jq -r '.name')
 SLUG=$(echo "$META" | jq -r '.slug')
