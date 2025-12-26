@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["name", "slug", "category", "icon_url"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Human readable app name"
+    },
+    "slug": {
+      "type": "string",
+      "description": "Lowercase dash-separated identifier"
+    },
+    "category": {
+      "type": "string",
+      "description": "XDG desktop category"
+    },
+    "icon_url": {
+      "type": "string",
+      "description": "High resolution PNG or SVG icon URL"
+    }
+  },
+  "additionalProperties": false
+}

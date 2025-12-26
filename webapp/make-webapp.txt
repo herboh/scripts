@@ -1,0 +1,13 @@
+Given the URL: {{ url }}
+
+Return JSON only with:
+- name: short human-friendly app name
+- slug: lowercase, dash-separated
+- category: valid XDG desktop category
+- icon_url: best high-resolution PNG or SVG icon suitable for desktop use
+
+Rules:
+- Prefer official logos or apple-touch-icon
+- Avoid favicons unless nothing else exists
+- No markdown
+- No commentary

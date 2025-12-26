@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+URL="${1:-}"
+[[ -z "$URL" ]] && echo "Usage: make-webapp <url>" && exit 1
+
+APP_DIR="$HOME/.local/share/applications"
+ICON_DIR="$HOME/.local/share/icons/webapps"
+BROWSER="chromium"
+MODEL="haiku"
+
+mkdir -p "$APP_DIR" "$ICON_DIR"
+
+PROMPT=$(cat <<EOF
+Given the URL: $URL
+
+Return JSON only with:
+- name
+- slug
+- category
+- icon_url
+EOF
+)
+
+META=$(llm -m "$MODEL" --schema ~/code/agent/schema.json "$PROMPT")
+
+NAME=$(echo "$META" | jq -r '.name')
+SLUG=$(echo "$META" | jq -r '.slug')
+CATEGORY=$(echo "$META" | jq -r '.category')
+ICON_URL=$(echo "$META" | jq -r '.icon_url')
+
+DESKTOP="$APP_DIR/webapp-$SLUG.desktop"
+ICON_PATH="$ICON_DIR/$SLUG.png"
+
+if ! curl -fsL "$ICON_URL" -o "$ICON_PATH"; then
+  ICON_PATH="applications-internet"
+fi
+
+cat > "$DESKTOP" <<EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=$NAME
+Exec=$BROWSER --app=$URL
+Icon=$ICON_PATH
+Terminal=false
+Categories=$CATEGORY;
+StartupWMClass=$SLUG
+EOF
+
+chmod +x "$DESKTOP"
+
+echo "✅ Created webapp: $NAME"
